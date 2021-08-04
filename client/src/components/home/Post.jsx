@@ -33,16 +33,16 @@ const useStyles = makeStyles({
   },
 });
 
-const Post = () => {
+const Post = ({post}) => {
   const classes = useStyles();
-  const url = "https://i.imgur.com/uaPwCQE.jpg";
+  const url = post.picture || "https://i.imgur.com/uaPwCQE.jpg";
   return (
     <Box className={classes.container}>
-      <img className={classes.image} src={url} alt="Post Image" />
-      <Typography className={classes.text}>Music</Typography>
-      <Typography className={classes.heading}>Luff-Blog</Typography>
-      <Typography className={classes.text}>lorem</Typography>
-      <Typography className={classes.detail}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Illo rem vero et illum optio excepturi esse nihil eos. Nisi voluptatibus maxime odio dignissimos saepe praesentium a facere est corrupti ut!</Typography>
+      <img className={classes.image} src={url} />
+      <Typography className={classes.text}>{post.categories}</Typography>
+      <Typography className={classes.heading}>{post.title}</Typography>
+      <Typography className={classes.text}>Author: {post.username}</Typography>
+      <Typography className={classes.detail}>{post.description}</Typography>
     </Box>
   );
 };

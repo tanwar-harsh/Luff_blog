@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Box,
   makeStyles,
@@ -7,6 +8,8 @@ import {
   Button,
 } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
+import { getPost, updatePost } from "../../service/api";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -41,23 +44,67 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UpdateView = () => {
+const initialValues = {
+  title: "",
+  description: "",
+  picture: "",
+  username: "Harsh",
+  categories: "All",
+  createdDate: new Date(),
+};
+
+const UpdateView = ({ match }) => {
   const url = "https://i.imgur.com/uaPwCQE.jpg";
   const classes = useStyles();
+  const history = useHistory();
+
+  const [post, setPost] = useState(initialValues);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let data = await getPost(match.params.id);
+      console.log(data);
+      setPost(data);
+    };
+    fetchData();
+  }, [match.params.id]);
+
+  const handleChange = (e) => {
+    setPost({ ...post, [e.target.name]: e.target.value });
+  };
+
+  const updateBlog = async () => {
+    await updatePost(match.params.id, post);
+    history.push(`/details/${match.params.id}`);
+  };
+
   return (
     <Box className={classes.container}>
-      <img src={url} alt="Create image" className={classes.image} />
+      <img src={url} className={classes.image} />
       <FormControl className={classes.form}>
         <AddCircle fontSize="large" color="action" />
-        <InputBase placeholder="title" className={classes.textField} />
-        <Button variant="contained" color="primary">
+        <InputBase
+          onChange={(e) => handleChange(e)}
+          name="title"
+          placeholder="title"
+          value={post.title}
+          className={classes.textField}
+        />
+        <Button
+          onClick={() => updateBlog()}
+          variant="contained"
+          color="primary"
+        >
           Update
         </Button>
       </FormControl>
 
       <TextareaAutosize
+        onChange={(e) => handleChange(e)}
+        name="description"
         minRows={5}
         placeholder="Tell your Story"
+        value={post.description}
         className={classes.textarea}
       />
     </Box>

@@ -72,7 +72,7 @@ const CreateView = () => {
 
   return (
     <Box className={classes.container}>
-      <img src={url} alt="Create image" className={classes.image} />
+      <img src={url} className={classes.image} />
       <FormControl className={classes.form}>
         <AddCircle fontSize="large" color="action" />
 

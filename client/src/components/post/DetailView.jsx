@@ -1,6 +1,9 @@
+import { useState, useEffect } from "react";
 import { Box, makeStyles, Typography } from "@material-ui/core";
 import { Edit, Delete } from "@material-ui/icons";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+
+import { getPost, deletePost } from "../../service/api";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -39,33 +42,53 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const DetailView = () => {
+const DetailView = ({ match }) => {
   const classes = useStyles();
   const url = "https://i.imgur.com/uaPwCQE.jpg";
+  const history = useHistory();
+
+  const [post, setPost] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let data = await getPost(match.params.id);
+      console.log(data);
+      setPost(data);
+    };
+    fetchData();
+  }, [match.params.id]);
+
+  const deleteBlog = async () => {
+    await deletePost(post._id);
+    history.push("/");
+  };
+
   return (
     <Box className={classes.container}>
-      <img src={url} alt="Detail Image" className={classes.image} />
+      <img src={post.picture || url} className={classes.image} />
       <Box className={classes.icons}>
-        <Link to="/update">
+        <Link to={`/update/${post._id}`}>
           <Edit className={classes.icon} color="primary" />
         </Link>
-        <Delete className={classes.icon} color="error" />
+        <Delete
+          onClick={() => deleteBlog()}
+          className={classes.icon}
+          color="error"
+        />
       </Box>
-      <Typography className={classes.heading}>Title of the Blog</Typography>
+      <Typography className={classes.heading}>{post.title}</Typography>
 
       <Box className={classes.subheading}>
         <Typography>
-          Author:<span style={{ fontWeight: 600 }}> Harsh</span>
+          Author:
+          <span style={{ fontWeight: 600 }}>Author: {post.username}</span>
         </Typography>
-        <Typography style={{ marginLeft: "auto" }}>2 Aug 2021</Typography>
+        <Typography style={{ marginLeft: "auto" }}>
+          {new Date(post.createdDate).toDateString()}
+        </Typography>
       </Box>
 
-      <Typography>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis,
-        voluptatem consectetur? Odio quas harum repellat debitis ex, soluta
-        quaerat unde eveniet voluptates incidunt? Officiis atque sint debitis
-        praesentium, repellat eum.
-      </Typography>
+      <Typography>{post.description}</Typography>
     </Box>
   );
 };
