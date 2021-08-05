@@ -40,6 +40,10 @@ const useStyles = makeStyles((theme) => ({
     },
     margin: "20px 0",
   },
+  link: {
+    textDecoration: "none",
+    color: "inherit",
+  }
 }));
 
 const DetailView = ({ match }) => {
@@ -67,7 +71,7 @@ const DetailView = ({ match }) => {
     <Box className={classes.container}>
       <img src={post.picture || url} className={classes.image} />
       <Box className={classes.icons}>
-        <Link to={`/update/${post._id}`}>
+        <Link to={`/update/${post._id}`} >
           <Edit className={classes.icon} color="primary" />
         </Link>
         <Delete
@@ -79,10 +83,11 @@ const DetailView = ({ match }) => {
       <Typography className={classes.heading}>{post.title}</Typography>
 
       <Box className={classes.subheading}>
-        <Typography>
-          Author:
-          <span style={{ fontWeight: 600 }}>Author: {post.username}</span>
-        </Typography>
+        <Link to={`/?username=${post.username}`} className={classes.link}>
+          <Typography>
+            <span style={{ fontWeight: 600 }}>Author: {post.username}</span>
+          </Typography>
+        </Link>
         <Typography style={{ marginLeft: "auto" }}>
           {new Date(post.createdDate).toDateString()}
         </Typography>
