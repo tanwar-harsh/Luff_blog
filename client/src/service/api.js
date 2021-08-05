@@ -10,9 +10,9 @@ export const createPost = async (post) => {
   }
 };
 
-export const getAllPosts = async () => {
+export const getAllPosts = async (param) => {
   try {
-    let response = await axios.get(`${URL}/posts`);
+    let response = await axios.get(`${URL}/posts${param}`);
     return response.data;
   } catch (error) {
     console.log("Error while calling getAllPosts API", error);
@@ -41,5 +41,13 @@ export const deletePost = async (id) => {
     await axios.delete(`${URL}/delete/${id}`)
   } catch (error) {
     console.log("Error while deleting post", error)
+  }
+}
+
+export const uploadFile = async (data) => {
+  try {
+    return await axios.post(`${URL}/file/upload`, data)
+  } catch (error) {
+    console.log("Error while uploading the image", error)
   }
 }
