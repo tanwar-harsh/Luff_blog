@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   makeStyles,
@@ -10,7 +10,7 @@ import {
 import { AddCircle } from "@material-ui/icons";
 import { useHistory } from "react-router-dom";
 
-import { createPost } from "../../service/api";
+import { createPost, uploadFile } from "../../service/api";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -55,11 +55,29 @@ const initialValues = {
 };
 
 const CreateView = () => {
-  const url = "https://i.imgur.com/uaPwCQE.jpg";
   const classes = useStyles();
   const history = useHistory();
 
   const [post, setPost] = useState(initialValues);
+  const [file, setFile] = useState("");
+  const [image, setImage] = useState("");
+
+  const url = post.picture ? post.picture : "https://i.imgur.com/uaPwCQE.jpg";
+
+  useEffect(() => {
+    const getImage = async () => {
+      if (file) {
+        const data = new FormData();
+        data.append("name", file.name);
+        data.append("file", file);
+
+        const image = await uploadFile(data);
+        post.picture = image.data;
+        setImage(image.data);
+      }
+    };
+    getImage();
+  }, [file]);
 
   const handleChange = (e) => {
     setPost({ ...post, [e.target.name]: e.target.value });
@@ -74,7 +92,18 @@ const CreateView = () => {
     <Box className={classes.container}>
       <img src={url} className={classes.image} />
       <FormControl className={classes.form}>
-        <AddCircle fontSize="large" color="action" />
+        <label htmlFor="fileInput">
+          <AddCircle fontSize="large" color="action" />
+        </label>
+        <input
+          onChange={(e) => {
+            setFile(e.target.files[0]);
+            console.log(e.target.files[0]);
+          }}
+          type="file"
+          id="fileInput"
+          style={{ display: "none" }}
+        />
 
         <InputBase
           onChange={(e) => handleChange(e)}
