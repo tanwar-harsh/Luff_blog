@@ -26,14 +26,15 @@ const useStyles = makeStyles({
   heading: {
     fontSize: 18,
     fontWeight: 600,
+    textAlign: "center",
   },
   detail: {
-      fontSize: 14,
-      wordBreak: "break-word",
+    fontSize: 14,
+    wordBreak: "break-word",
   },
 });
 
-const Post = ({post}) => {
+const Post = ({ post }) => {
   const classes = useStyles();
   const url = post.picture || "https://i.imgur.com/uaPwCQE.jpg";
   return (
