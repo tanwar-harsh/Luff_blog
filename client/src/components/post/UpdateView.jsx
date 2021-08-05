@@ -8,7 +8,7 @@ import {
   Button,
 } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
-import { getPost, updatePost } from "../../service/api";
+import { getPost, updatePost, uploadFile } from "../../service/api";
 import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -54,11 +54,29 @@ const initialValues = {
 };
 
 const UpdateView = ({ match }) => {
-  const url = "https://i.imgur.com/uaPwCQE.jpg";
   const classes = useStyles();
   const history = useHistory();
 
   const [post, setPost] = useState(initialValues);
+  const [file, setFile] = useState("");
+  const [image, setImage] = useState("");
+
+  const url = post.picture ? post.picture : "https://i.imgur.com/uaPwCQE.jpg";
+
+  useEffect(() => {
+    const getImage = async () => {
+      if (file) {
+        const data = new FormData();
+        data.append("name", file.name);
+        data.append("file", file);
+
+        const image = await uploadFile(data);
+        post.picture = image.data;
+        setImage(image.data);
+      }
+    };
+    getImage();
+  }, [file]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,7 +100,19 @@ const UpdateView = ({ match }) => {
     <Box className={classes.container}>
       <img src={url} className={classes.image} />
       <FormControl className={classes.form}>
-        <AddCircle fontSize="large" color="action" />
+        <label htmlFor="fileInput">
+          <AddCircle fontSize="large" color="action" />
+        </label>
+        <input
+          onChange={(e) => {
+            setFile(e.target.files[0]);
+            console.log(e.target.files[0]);
+          }}
+          type="file"
+          id="fileInput"
+          style={{ display: "none" }}
+        />
+
         <InputBase
           onChange={(e) => handleChange(e)}
           name="title"
