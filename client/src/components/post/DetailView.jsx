@@ -76,7 +76,8 @@ const DetailView = ({ match }) => {
   return (
     <Box className={classes.container}>
       <img src={post.picture || url} className={classes.image} />
-      {user?.result ? (
+      {user?.result.name == post.username ||
+      user?.result.email == "test@gmail.com" ? (
         <Box className={classes.icons}>
           <Link to={`/update/${post._id}`}>
             <Edit className={classes.icon} color="primary" />

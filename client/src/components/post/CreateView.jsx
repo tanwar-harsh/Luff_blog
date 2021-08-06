@@ -80,10 +80,14 @@ const CreateView = () => {
   const [image, setImage] = useState("");
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
-  useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem("profile")));
-    console.log(user);
-  }, [location]);
+  useEffect(
+    (post) => {
+      setUser(JSON.parse(localStorage.getItem("profile")));
+      console.log(user);
+      setPost({ ...post, username: user?.result.name });
+    },
+    [location]
+  );
 
   const url = post.picture ? post.picture : "https://i.imgur.com/uaPwCQE.jpg";
 
@@ -135,15 +139,6 @@ const CreateView = () => {
             placeholder="Title"
             className={classes.textField}
             name="title"
-          />
-
-          <InputBase
-            onChange={(e) => handleChange(e)}
-            placeholder="Author"
-            className={classes.textField}
-            name="username"
-            type="hidden"
-            value={user?.result.name}
           />
 
           <Button

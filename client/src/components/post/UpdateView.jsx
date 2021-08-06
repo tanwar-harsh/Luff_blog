@@ -6,10 +6,12 @@ import {
   FormControl,
   InputBase,
   Button,
+  Typography,
+  NativeSelect,
 } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
 import { getPost, updatePost, uploadFile } from "../../service/api";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -24,9 +26,23 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
   },
   form: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    marginTop: 10,
+  },
+  form1: {
     display: "flex",
     flexDirection: "row",
-    marginTop: 10,
+    width: "100%",
+  },
+  form2: {
+    display: "flex",
+    flexDirection: "column",
+    paddingTop: 20,
+    width: "30%",
+    fontSize: 12,
+    color: "#878787",
   },
   textField: {
     flex: 1,
@@ -48,7 +64,7 @@ const initialValues = {
   title: "",
   description: "",
   picture: "",
-  username: "Harsh",
+  username: "You",
   categories: "All",
   createdDate: new Date(),
 };
@@ -56,10 +72,30 @@ const initialValues = {
 const UpdateView = ({ match }) => {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
 
   const [post, setPost] = useState(initialValues);
   const [file, setFile] = useState("");
   const [image, setImage] = useState("");
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+
+  useEffect(() => {
+    const fetchData = async () => {
+      let data = await getPost(match.params.id);
+      console.log(data);
+      setPost(data);
+    };
+    fetchData();
+  }, [match.params.id]);
+
+  useEffect(
+    (post) => {
+      setUser(JSON.parse(localStorage.getItem("profile")));
+      console.log(user);
+      /* setPost({ ...post, username: user?.result.name }); */
+    },
+    [location]
+  );
 
   const url = post.picture ? post.picture : "https://i.imgur.com/uaPwCQE.jpg";
 
@@ -78,15 +114,6 @@ const UpdateView = ({ match }) => {
     getImage();
   }, [file]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      let data = await getPost(match.params.id);
-      console.log(data);
-      setPost(data);
-    };
-    fetchData();
-  }, [match.params.id]);
-
   const handleChange = (e) => {
     setPost({ ...post, [e.target.name]: e.target.value });
   };
@@ -100,33 +127,53 @@ const UpdateView = ({ match }) => {
     <Box className={classes.container}>
       <img src={url} className={classes.image} />
       <FormControl className={classes.form}>
-        <label htmlFor="fileInput">
-          <AddCircle fontSize="large" color="action" />
-        </label>
-        <input
-          onChange={(e) => {
-            setFile(e.target.files[0]);
-            console.log(e.target.files[0]);
-          }}
-          type="file"
-          id="fileInput"
-          style={{ display: "none" }}
-        />
+        <Box>
+          <label htmlFor="fileInput">
+            <AddCircle fontSize="large" color="action" />
+          </label>
+          <input
+            onChange={(e) => {
+              setFile(e.target.files[0]);
+              console.log(e.target.files[0]);
+            }}
+            type="file"
+            id="fileInput"
+            style={{ display: "none" }}
+          />
 
-        <InputBase
-          onChange={(e) => handleChange(e)}
-          name="title"
-          placeholder="title"
-          value={post.title}
-          className={classes.textField}
-        />
-        <Button
-          onClick={() => updateBlog()}
-          variant="contained"
-          color="primary"
-        >
-          Update
-        </Button>
+          <InputBase
+            onChange={(e) => handleChange(e)}
+            name="title"
+            placeholder="title"
+            value={post.title}
+            className={classes.textField}
+          />
+          <Button
+            onClick={() => updateBlog()}
+            variant="contained"
+            color="primary"
+          >
+            Update
+          </Button>
+        </Box>
+        <Box className={classes.form2}>
+          <Typography className={classes.form2}> Category: </Typography>
+
+          <NativeSelect
+            value={post.categories}
+            onChange={handleChange}
+            name="categories"
+            className={classes.selectEmpty}
+            inputProps={{ categories: "categories" }}
+          >
+            <option value="">None</option>
+            <option value="Music">Music</option>
+            <option value="Movies">Movies</option>
+            <option value="Sports">Sports</option>
+            <option value="Tech">Tech</option>
+            <option value="Fashion">Fashion</option>
+          </NativeSelect>
+        </Box>
       </FormControl>
 
       <TextareaAutosize
