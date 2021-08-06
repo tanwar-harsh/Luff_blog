@@ -8,6 +8,7 @@ import Home from "./components/home/Home";
 import DetailView from "./components/post/DetailView";
 import CreateView from "./components/post/CreateView";
 import UpdateView from "./components/post/UpdateView";
+import Auth from "./components/auth/Auth";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/details/:id" component={DetailView} />
           <Route path="/create" component={CreateView} />
           <Route path="/update/:id" component={UpdateView} />
+          <Route path="/auth" component={Auth} />
         </Switch>
       </Box>
     </BrowserRouter>
