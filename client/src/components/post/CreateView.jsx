@@ -6,9 +6,11 @@ import {
   FormControl,
   InputBase,
   Button,
+  Typography,
+  NativeSelect,
 } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 import { createPost, uploadFile } from "../../service/api";
 
@@ -25,9 +27,23 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
   },
   form: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    marginTop: 10,
+  },
+  form1: {
     display: "flex",
     flexDirection: "row",
-    marginTop: 10,
+    width: "100%",
+  },
+  form2: {
+    display: "flex",
+    flexDirection: "column",
+    paddingTop: 20,
+    width: "30%",
+    fontSize: 12,
+    color: "#878787",
   },
   textField: {
     flex: 1,
@@ -49,7 +65,7 @@ const initialValues = {
   title: "",
   description: "",
   picture: "",
-  username: "Harsh",
+  username: "You",
   categories: "All",
   createdDate: new Date(),
 };
@@ -57,10 +73,17 @@ const initialValues = {
 const CreateView = () => {
   const classes = useStyles();
   const history = useHistory();
+  const location = useLocation();
 
   const [post, setPost] = useState(initialValues);
   const [file, setFile] = useState("");
   const [image, setImage] = useState("");
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("profile")));
+    console.log(user);
+  }, [location]);
 
   const url = post.picture ? post.picture : "https://i.imgur.com/uaPwCQE.jpg";
 
@@ -84,6 +107,7 @@ const CreateView = () => {
   };
 
   const savePost = async () => {
+    console.log(post);
     await createPost(post);
     history.push("/");
   };
@@ -92,29 +116,62 @@ const CreateView = () => {
     <Box className={classes.container}>
       <img src={url} className={classes.image} />
       <FormControl className={classes.form}>
-        <label htmlFor="fileInput">
-          <AddCircle fontSize="large" color="action" />
-        </label>
-        <input
-          onChange={(e) => {
-            setFile(e.target.files[0]);
-            console.log(e.target.files[0]);
-          }}
-          type="file"
-          id="fileInput"
-          style={{ display: "none" }}
-        />
+        <Box classNam={classes.form1}>
+          <label htmlFor="fileInput">
+            <AddCircle fontSize="large" color="action" />
+          </label>
+          <input
+            onChange={(e) => {
+              setFile(e.target.files[0]);
+              console.log(e.target.files[0]);
+            }}
+            type="file"
+            id="fileInput"
+            style={{ display: "none" }}
+          />
 
-        <InputBase
-          onChange={(e) => handleChange(e)}
-          placeholder="Title"
-          className={classes.textField}
-          name="title"
-        />
+          <InputBase
+            onChange={(e) => handleChange(e)}
+            placeholder="Title"
+            className={classes.textField}
+            name="title"
+          />
 
-        <Button onClick={() => savePost()} variant="contained" color="primary">
-          Publish
-        </Button>
+          <InputBase
+            onChange={(e) => handleChange(e)}
+            placeholder="Author"
+            className={classes.textField}
+            name="username"
+            type="hidden"
+            value={user?.result.name}
+          />
+
+          <Button
+            onClick={() => savePost()}
+            variant="contained"
+            color="primary"
+          >
+            Publish
+          </Button>
+        </Box>
+        <Box className={classes.form2}>
+          <Typography className={classes.form2}> Category: </Typography>
+
+          <NativeSelect
+            value={post.categories}
+            onChange={handleChange}
+            name="categories"
+            className={classes.selectEmpty}
+            inputProps={{ categories: "categories" }}
+          >
+            <option value="">None</option>
+            <option value="Music">Music</option>
+            <option value="Movies">Movies</option>
+            <option value="Sports">Sports</option>
+            <option value="Tech">Tech</option>
+            <option value="Fashion">Fashion</option>
+          </NativeSelect>
+        </Box>
       </FormControl>
 
       <TextareaAutosize

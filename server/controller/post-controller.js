@@ -2,9 +2,9 @@ import { response } from "express";
 import Post from "../schema/post-schema.js";
 
 export const createPost = async (req, res) => {
-  console.log(req.body);
   try {
     const post = await new Post(req.body);
+    console.log(post);
     post.save();
     res.status(200).res("Blog saved");
   } catch (error) {

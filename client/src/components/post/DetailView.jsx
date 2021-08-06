@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Box, makeStyles, Typography } from "@material-ui/core";
 import { Edit, Delete } from "@material-ui/icons";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 import { getPost, deletePost } from "../../service/api";
 
@@ -43,15 +43,21 @@ const useStyles = makeStyles((theme) => ({
   link: {
     textDecoration: "none",
     color: "inherit",
-  }
+  },
 }));
 
 const DetailView = ({ match }) => {
   const classes = useStyles();
   const url = "https://i.imgur.com/uaPwCQE.jpg";
   const history = useHistory();
+  const location = useLocation();
 
   const [post, setPost] = useState({});
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, [location]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -70,16 +76,20 @@ const DetailView = ({ match }) => {
   return (
     <Box className={classes.container}>
       <img src={post.picture || url} className={classes.image} />
-      <Box className={classes.icons}>
-        <Link to={`/update/${post._id}`} >
-          <Edit className={classes.icon} color="primary" />
-        </Link>
-        <Delete
-          onClick={() => deleteBlog()}
-          className={classes.icon}
-          color="error"
-        />
-      </Box>
+      {user?.result ? (
+        <Box className={classes.icons}>
+          <Link to={`/update/${post._id}`}>
+            <Edit className={classes.icon} color="primary" />
+          </Link>
+          <Delete
+            onClick={() => deleteBlog()}
+            className={classes.icon}
+            color="error"
+          />
+        </Box>
+      ) : (
+        <Box></Box>
+      )}
       <Typography className={classes.heading}>{post.title}</Typography>
 
       <Box className={classes.subheading}>

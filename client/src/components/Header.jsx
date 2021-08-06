@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import decode from 'jwt-decode';
+import decode from "jwt-decode";
 
 //components
 import * as data from "../constants/data";
@@ -73,14 +73,14 @@ const Header = () => {
 
   return (
     <AppBar className={classes.component}>
-      <Toolbar className={classes.container}>
-        <Link to="/" className={classes.link}>
-          <Typography>HOME</Typography>
-        </Link>
-        <Typography>ABOUT</Typography>
-        <Typography>CONTACT</Typography>
-        <Toolbar className={classes.toolbar}>
-          {user?.result ? (
+      {user?.result ? (
+        <Toolbar className={classes.container}>
+          <Link to="/" className={classes.link}>
+            <Typography>HOME</Typography>
+          </Link>
+          <Typography>ABOUT</Typography>
+          <Typography>CONTACT</Typography>
+          <Toolbar className={classes.toolbar}>
             <div className={classes.profile}>
               <Avatar
                 className={classes.purple}
@@ -101,13 +101,24 @@ const Header = () => {
                 Logout
               </Button>
             </div>
-          ) : (
-            <Button component={Link} to="/auth" color="primary">
-              Login
-            </Button>
-          )}
+          </Toolbar>
         </Toolbar>
-      </Toolbar>
+      ) : (
+        <Toolbar className={classes.container}>
+          <Link to="/" className={classes.link}>
+            <Typography>HOME</Typography>
+          </Link>
+          <Typography>ABOUT</Typography>
+          <Typography>CONTACT</Typography>
+          <Toolbar className={classes.toolbar}>
+            <div className={classes.profile}>
+              <Button component={Link} to="/auth" color="primary">
+                Login
+              </Button>
+            </div>
+          </Toolbar>
+        </Toolbar>
+      )}
     </AppBar>
   );
 };

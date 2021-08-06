@@ -8,15 +8,18 @@ import {
   Paper,
   makeStyles,
   TextField,
+  InputAdornment,
+  IconButton,
 } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
-import { LockOutlined } from "@material-ui/icons";
+import { LockOutlined, Visibility, VisibilityOff } from "@material-ui/icons";
 import { GoogleLogin } from "react-google-login";
 import { useDispatch } from "react-redux";
 
 //components
 import Icon from "./Icon";
 import { AUTH } from "../../constants/data";
+import { signIn, signUp } from "../../actions/auth";
 
 const useStyles = makeStyles({
   container: {
@@ -56,16 +59,44 @@ const useStyles = makeStyles({
   },
 });
 
+const initailState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  password2: "",
+  createdDate: new Date(),
+};
+
 const Auth = () => {
   const classes = useStyles();
   const [isSignUp, setIsSignUp] = useState(false);
+  const [formData, setFormData] = useState(initailState);
+  const [showPassword, setShowPassword] = useState(false);
+  const handleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+  const [showPassword1, setShowPassword1] = useState(false);
+  const handleShowPassword1 = () => {
+    setShowPassword1(!showPassword1);
+  };
 
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    if (isSignUp) {
+      dispatch(signUp(formData, history));
+    } else {
+      dispatch(signIn(formData, history));
+    }
+  };
 
-  const handleChange = (e) => {};
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const switchMode = (isSignUp) => {
     setIsSignUp((prevIsSignUp) => !prevIsSignUp);
@@ -97,11 +128,12 @@ const Auth = () => {
         <Typography className={classes.heading}>
           {isSignUp ? "Sign Up" : "Login"}
         </Typography>
-        <form className={classes.form}>
+        <form className={classes.form} onSubmit={(e) => handleSubmit(e)}>
           {isSignUp && (
             <>
               <TextField
                 onChange={(e) => handleChange(e)}
+                required
                 name="firstName"
                 placeholder=" First Name"
                 className={classes.textField}
@@ -109,6 +141,7 @@ const Auth = () => {
               />
               <TextField
                 onChange={(e) => handleChange(e)}
+                required
                 name="lastName"
                 placeholder=" Last Name"
                 className={classes.textField}
@@ -131,20 +164,51 @@ const Auth = () => {
             placeholder=" Password"
             className={classes.textField}
             variant="filled"
+            type={showPassword ? "text" : "password"}
+            handleShowPassword={handleShowPassword}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleShowPassword}>
+                    {showPassword === false ? (
+                      <Visibility />
+                    ) : (
+                      <VisibilityOff />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
           {isSignUp && (
             <>
               <TextField
                 onChange={(e) => handleChange(e)}
+                required
                 name="password2"
                 placeholder="Confirm password"
                 className={classes.textField}
                 variant="filled"
+                type={showPassword1 ? "text" : "password"}
+                handleShowPassword={handleShowPassword1}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleShowPassword1}>
+                        {showPassword1 === false ? (
+                          <Visibility />
+                        ) : (
+                          <VisibilityOff />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
               />
             </>
           )}
           <Button
-            onClick={() => handleSubmit()}
+            type="submit"
             variant="contained"
             color="primary"
             className={classes.button}
