@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 import grid from "gridfs-stream";
 
-const url = `http://localhost:8000`;
+const url = `https://luff-blog.herokuapp.com`;
 
 let gfs;
 const conn = mongoose.connection;
 conn.once("open", () => {
-    gfs = grid(conn.db, mongoose.mongo);
-    gfs.collection("fs");
+  gfs = grid(conn.db, mongoose.mongo);
+  gfs.collection("fs");
 });
 
 export const uploadImage = async (req, res) => {
@@ -21,10 +21,10 @@ export const uploadImage = async (req, res) => {
 };
 
 export const getImage = async (req, res) => {
-    try {
-        const file = await gfs.files.findOne({ filename: req.params.filename });
-        const readStream = gfs.createReadStream(file.filename);
-        readStream.pipe(res);
+  try {
+    const file = await gfs.files.findOne({ filename: req.params.filename });
+    const readStream = gfs.createReadStream(file.filename);
+    readStream.pipe(res);
   } catch (error) {
     res.status(500).json("Error to fetch the image", error);
   }

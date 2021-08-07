@@ -111,9 +111,14 @@ const CreateView = () => {
   };
 
   const savePost = async () => {
-    console.log(post);
+    if (user?.result) {
+      console.log(post);
     await createPost(post);
     history.push("/");
+    }
+    else {
+      alert("Login to create a blog")
+    }
   };
 
   return (

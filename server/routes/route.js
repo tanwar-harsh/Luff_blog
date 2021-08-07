@@ -15,6 +15,8 @@ import upload from "../utils/upload.js";
 
 const router = express.Router();
 
+router.get("/", (req, res) => res.status(200).send("Luff-Blog Working"));
+
 router.post("/create", auth, createPost);
 
 router.get("/posts", getAllPosts);
