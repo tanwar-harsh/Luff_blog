@@ -10,7 +10,10 @@ export const signIn = (formData, router) => async (dispatch) => {
 
     router.push("/");
   } catch (error) {
-    console.log(error);
+    if (error.response.status === 404) {
+      alert(error.response.data.message);
+    }
+    console.log(error.response);
   }
 };
 
@@ -24,6 +27,9 @@ export const signUp = (formData, router) => async (dispatch) => {
 
     router.push("/");
   } catch (error) {
+    if (error.response.status === 404) {
+      alert(error.response.data.message);
+    }
     console.log(error);
   }
 };

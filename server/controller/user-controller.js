@@ -28,15 +28,14 @@ export const signIn = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ result: existingUser, token });
+    res.status(200).json({ result: existingUser, token});
   } catch (error) {
     res.status(500).json({ message: "Something went Wrong" });
   }
 };
 
 export const signUp = async (req, res) => {
-  const { email, password, firstName, lastName, createdDate } =
-    req.body;
+  const { email, password, firstName, lastName, createdDate } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });

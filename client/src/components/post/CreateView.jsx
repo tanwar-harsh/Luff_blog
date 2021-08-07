@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
   },
   form: {
-    width: "100%",
+    width: "80vw",
     display: "flex",
     flexDirection: "column",
     marginTop: 10,
@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
   form1: {
     display: "flex",
     flexDirection: "row",
-    width: "100%",
+    flex: 1,
   },
   form2: {
     display: "flex",
@@ -120,7 +120,7 @@ const CreateView = () => {
     <Box className={classes.container}>
       <img src={url} className={classes.image} />
       <FormControl className={classes.form}>
-        <Box classNam={classes.form1}>
+        <Box className={classes.form1}>
           <label htmlFor="fileInput">
             <AddCircle fontSize="large" color="action" />
           </label>

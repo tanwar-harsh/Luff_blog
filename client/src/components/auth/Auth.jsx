@@ -15,6 +15,7 @@ import { Link, useHistory } from "react-router-dom";
 import { LockOutlined, Visibility, VisibilityOff } from "@material-ui/icons";
 import { GoogleLogin } from "react-google-login";
 import { useDispatch } from "react-redux";
+import { Alert } from "@material-ui/lab";
 
 //components
 import Icon from "./Icon";
@@ -88,7 +89,14 @@ const Auth = () => {
     e.preventDefault();
     console.log(formData);
     if (isSignUp) {
-      dispatch(signUp(formData, history));
+      try {
+        dispatch(signUp(formData, history));
+      } catch (error) {
+        if (error.response.status === 404) {
+          <Alert severity="error">Invalid User</Alert>;
+          alert("poop");
+        }
+      }
     } else {
       dispatch(signIn(formData, history));
     }
