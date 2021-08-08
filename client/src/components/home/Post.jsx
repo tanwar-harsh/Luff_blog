@@ -37,13 +37,20 @@ const useStyles = makeStyles({
 const Post = ({ post }) => {
   const classes = useStyles();
   const url = post.picture || "https://i.imgur.com/uaPwCQE.jpg";
+
+  const description = post.description;
+  const maxLength = 100;
+  let trimmedDescription = description.substr(0, maxLength);
+
   return (
     <Box className={classes.container}>
       <img className={classes.image} src={url} />
       <Typography className={classes.text}>{post.categories}</Typography>
       <Typography className={classes.heading}>{post.title}</Typography>
       <Typography className={classes.text}>Author: {post.username}</Typography>
-      <Typography className={classes.detail}>{post.description}</Typography>
+      <Typography
+        className={classes.detail}
+      >{`${trimmedDescription} ...`}</Typography>
     </Box>
   );
 };

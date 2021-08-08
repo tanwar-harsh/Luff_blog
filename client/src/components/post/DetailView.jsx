@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
     border: "1px solid #878787",
     padding: 5,
     borderRadius: 10,
+    cursor: "pointer",
   },
   heading: {
     fontSize: 38,

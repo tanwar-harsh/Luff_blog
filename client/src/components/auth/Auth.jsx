@@ -90,7 +90,11 @@ const Auth = () => {
     console.log(formData);
     if (isSignUp) {
       try {
-        dispatch(signUp(formData, history));
+        if (formData.password === formData.password2) {
+          dispatch(signUp(formData, history));
+        } else {
+          alert("Passwords don't match");
+        }
       } catch (error) {
         if (error.response.status === 404) {
           <Alert severity="error">Invalid User</Alert>;
@@ -116,7 +120,6 @@ const Auth = () => {
 
     try {
       dispatch({ type: AUTH, data: { result, token } });
-
       history.push("/");
     } catch (error) {
       console.log(error);
@@ -224,7 +227,7 @@ const Auth = () => {
             {isSignUp ? "Sign Up" : "Login"}
           </Button>
 
-          <GoogleLogin
+          {/* <GoogleLogin
             clientId="9556540863-q82l1ee8u1d7g9g9ll0ohu2jqlfbnfpl.apps.googleusercontent.com"
             render={(renderProps) => (
               <Button
@@ -241,7 +244,7 @@ const Auth = () => {
             onSuccess={googleSuccess}
             onFailure={googleError}
             cookiePolicy="single_host_origin"
-          />
+          /> */}
 
           <Box className={classes.button2}>
             <Button

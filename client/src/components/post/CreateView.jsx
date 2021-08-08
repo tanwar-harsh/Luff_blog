@@ -65,9 +65,9 @@ const initialValues = {
   title: "",
   description: "",
   picture: "",
-  username: "You",
   categories: "All",
   createdDate: new Date(),
+  username: "You",
 };
 
 const CreateView = () => {
@@ -80,14 +80,12 @@ const CreateView = () => {
   const [image, setImage] = useState("");
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
 
-  useEffect(
-    (post) => {
-      setUser(JSON.parse(localStorage.getItem("profile")));
-      console.log(user);
-      setPost({ ...post, username: user?.result.name });
-    },
-    [location]
-  );
+  useEffect(() => {
+    setUser(JSON.parse(localStorage.getItem("profile")));
+    console.log(user);
+    post.username = user?.result.name;
+    /* setPost({ ...post, username: user?.result.name }); */
+  }, [location]);
 
   const url = post.picture ? post.picture : "https://i.imgur.com/uaPwCQE.jpg";
 
@@ -111,13 +109,13 @@ const CreateView = () => {
   };
 
   const savePost = async () => {
+    console.log(post.createdDate);
     if (user?.result) {
       console.log(post);
-    await createPost(post);
-    history.push("/");
-    }
-    else {
-      alert("Login to create a blog")
+      await createPost(post);
+      history.push("/");
+    } else {
+      alert("Login to create a blog");
     }
   };
 
@@ -164,7 +162,7 @@ const CreateView = () => {
             className={classes.selectEmpty}
             inputProps={{ categories: "categories" }}
           >
-            <option value="">None</option>
+            <option value="All">None</option>
             <option value="Music">Music</option>
             <option value="Movies">Movies</option>
             <option value="Sports">Sports</option>
