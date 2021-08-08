@@ -14,7 +14,7 @@ import decode from "jwt-decode";
 //components
 import * as data from "../constants/data";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   component: {
     background: "white",
     color: "black",
@@ -25,6 +25,12 @@ const useStyles = makeStyles({
     justifyContent: "center",
     "& > *": {
       padding: "0 19px",
+    },
+    [theme.breakpoints.down("md")]: {
+      "& > *": {
+        padding: "0 10px",
+        fontSize: 14,
+      },
     },
   },
   link: {
@@ -42,7 +48,13 @@ const useStyles = makeStyles({
     alignItems: "center",
     width: "250px",
   },
-});
+  userName: {
+    fontSize: 16,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: 14,
+    },
+  },
+}));
 
 const Header = () => {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
@@ -76,14 +88,14 @@ const Header = () => {
       {user?.result ? (
         <Toolbar className={classes.container}>
           <Link to="/" className={classes.link}>
-            <Typography>HOME</Typography>
+            <Typography className={classes.userName}>HOME</Typography>
           </Link>
-          <Typography>ABOUT</Typography>
-          <Typography>CONTACT</Typography>
+          <Typography className={classes.userName}>ABOUT</Typography>
+          <Typography className={classes.userName}>CONTACT</Typography>
           <Toolbar className={classes.toolbar}>
             <div className={classes.profile}>
               <Avatar
-                className={classes.purple}
+                className={classes.avatar}
                 alt={user?.result.name}
                 src={user?.result.imageUrl}
               >

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Grid } from "@material-ui/core";
+import { Grid, Box } from "@material-ui/core";
 import { Link, useLocation } from "react-router-dom";
 
 import { getAllPosts } from "../../service/api";
@@ -21,13 +21,23 @@ const Posts = () => {
     fetchData();
   }, [search]);
 
-  return posts.map((post) => (
-    <Grid item lg={3} md={4} sm={12} xs={12}>
-      <Link to={`/details/${post._id}`} style={{ textDecoration: "none", color: "inherit" }}>
-        <Post post={post} />
-      </Link>
-    </Grid>
-  ));
+  const postCount = posts.length;
+  console.log(postCount);
+
+  if (postCount > 0) {
+    return posts.reverse().map((post) => (
+      <Grid item lg={3} md={4} sm={12} xs={12}>
+        <Link
+          to={`/details/${post._id}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <Post post={post} />
+        </Link>
+      </Grid>
+    ));
+  } else {
+    return <h1 style={{padding: 20, color:"#878787",}}>No Blogs found</h1>;
+  }
 };
 
 export default Posts;
