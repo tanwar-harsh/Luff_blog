@@ -1,4 +1,5 @@
 import { Box, Typography, makeStyles } from "@material-ui/core";
+import parse from "html-react-parser";
 
 const useStyles = makeStyles({
   container: {
@@ -12,6 +13,7 @@ const useStyles = makeStyles({
     "& > *": {
       padding: "0 5px 5px 5px",
     },
+    overflow: "hidden",
   },
   image: {
     height: 150,
@@ -38,9 +40,8 @@ const Post = ({ post }) => {
   const classes = useStyles();
   const url = post.picture || "https://i.imgur.com/uaPwCQE.jpg";
 
-  const description = post.description;
-  const maxLength = 100;
-  let trimmedDescription = description.substr(0, maxLength);
+  const data = `${post.description}`;
+  console.log(data);
 
   return (
     <Box className={classes.container}>
@@ -48,9 +49,9 @@ const Post = ({ post }) => {
       <Typography className={classes.text}>{post.categories}</Typography>
       <Typography className={classes.heading}>{post.title}</Typography>
       <Typography className={classes.text}>Author: {post.username}</Typography>
-      <Typography
-        className={classes.detail}
-      >{`${trimmedDescription} ...`}</Typography>
+      <Typography className={classes.detail} variant="p">
+        {parse(data)}
+      </Typography>
     </Box>
   );
 };

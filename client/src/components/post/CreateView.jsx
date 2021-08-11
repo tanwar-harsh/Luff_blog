@@ -9,10 +9,12 @@ import {
   Typography,
   NativeSelect,
 } from "@material-ui/core";
-import { AddCircle } from "@material-ui/icons";
+import { AddCircle, Image } from "@material-ui/icons";
 import { useHistory, useLocation } from "react-router-dom";
-
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { createPost, uploadFile } from "../../service/api";
+import parse from "html-react-parser";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -52,12 +54,18 @@ const useStyles = makeStyles((theme) => ({
   },
   textarea: {
     width: "100%",
-    border: "none",
-    marginTop: 50,
-    fontSize: 18,
-    "&:focus": {
-      outline: "none",
-    },
+    height: "100%",
+  },
+  button: {
+    margin: "0 10px",
+    backgroundColor: "white",
+    color: "black",
+  },
+  editor: {
+    paddingTop: "30px",
+  },
+  preview: {
+    paddingTop: "20px",
   },
 }));
 
@@ -79,6 +87,7 @@ const CreateView = () => {
   const [file, setFile] = useState("");
   const [image, setImage] = useState("");
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("profile")));
+  const [desc, setDesc] = useState("");
 
   useEffect(() => {
     setUser(JSON.parse(localStorage.getItem("profile")));
@@ -145,6 +154,16 @@ const CreateView = () => {
           />
 
           <Button
+            href="https://popa-topa.web.app/"
+            target="_blank"
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            startIcon={<Image />}
+          >
+            Find Images online
+          </Button>
+          <Button
             onClick={() => savePost()}
             variant="contained"
             color="primary"
@@ -172,13 +191,32 @@ const CreateView = () => {
         </Box>
       </FormControl>
 
-      <TextareaAutosize
+      {/* <TextareaAutosize
         onChange={(e) => handleChange(e)}
         minRows={5}
         placeholder="Tell your Story"
         className={classes.textarea}
         name="description"
-      />
+      /> */}
+      <Box className={classes.editor}>
+        <CKEditor
+          editor={ClassicEditor}
+          config={{
+            placeholder: "write your description .....",
+          }}
+          className={classes.textarea}
+          data={desc}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            setDesc(data);
+            post.description = data;
+            console.log(post.description);
+          }}
+        />
+      </Box>
+      <Box className={classes.preview}>
+        <Typography>Preview - {parse(desc)}</Typography>
+      </Box>
     </Box>
   );
 };

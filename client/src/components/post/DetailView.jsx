@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
-import { Box, makeStyles, Typography } from "@material-ui/core";
+import { Box, makeStyles, Typography, Button } from "@material-ui/core";
 import { Edit, Delete } from "@material-ui/icons";
 import { Link, useHistory, useLocation } from "react-router-dom";
-
+import parse from "html-react-parser";
 import { getPost, deletePost } from "../../service/api";
+/* import ReactHtmlParser, {
+  processNodes,
+  convertNodeToElement,
+  htmlparser2,
+} from "react-html-parser"; */
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -74,6 +79,8 @@ const DetailView = ({ match }) => {
     history.push("/");
   };
 
+  const data = `${post.description}`;
+  console.log(data);
   return (
     <Box className={classes.container}>
       <img src={post.picture || url} className={classes.image} />
@@ -104,8 +111,7 @@ const DetailView = ({ match }) => {
           {new Date(post.createdDate).toDateString()}
         </Typography>
       </Box>
-
-      <Typography>{post.description}</Typography>
+      <Typography>{parse(data)}</Typography>
     </Box>
   );
 };

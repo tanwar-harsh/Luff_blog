@@ -7,13 +7,13 @@ import {
   TableCell,
   TableBody,
 } from "@material-ui/core";
+import { Image } from "@material-ui/icons";
 import { categories } from "../../constants/data";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles({
   create: {
     margin: 20,
-    backgroundColor: "#6495ED",
     color: "white",
     width: "86%",
   },
@@ -31,10 +31,21 @@ const Categories = () => {
   return (
     <>
       <Link to="/create" className={classes.link}>
-        <Button variant="contained" className={classes.create}>
+        <Button variant="contained" color="primary" className={classes.create}>
           Create Blog
         </Button>
       </Link>
+
+      <Button
+        href="https://popa-topa.web.app/"
+        target="_blank"
+        variant="contained"
+        color="secondary"
+        className={classes.create}
+        startIcon={<Image />}
+      >
+        Find Images
+      </Button>
 
       <Table className={classes.table}>
         <TableHead>

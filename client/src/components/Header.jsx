@@ -32,6 +32,12 @@ const useStyles = makeStyles((theme) => ({
         fontSize: 14,
       },
     },
+    [theme.breakpoints.down("sm")]: {
+      "& > *": {
+        padding: "0 5px",
+        fontSize: 12,
+      },
+    },
   },
   link: {
     textDecoration: "none",
@@ -47,11 +53,20 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
     alignItems: "center",
     width: "250px",
+    [theme.breakpoints.down("sm")]: {
+      wadth: "200",
+    },
+    [theme.breakpoints.down("xs")]: {
+      width: "150px",
+    },
   },
   userName: {
     fontSize: 16,
-    [theme.breakpoints.down("sm")]: {
+    [theme.breakpoints.down("md")]: {
       fontSize: 14,
+    },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: 13,
     },
   },
 }));
@@ -83,19 +98,32 @@ const Header = () => {
     setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
 
+  function randomColor() {
+    let hex = Math.floor(Math.random() * 0xffffff);
+    let color = "#" + hex.toString(16);
+
+    return color;
+  }
+
   return (
     <AppBar className={classes.component}>
       {user?.result ? (
         <Toolbar className={classes.container}>
           <Link to="/" className={classes.link}>
-            <Typography className={classes.userName}>HOME</Typography>
+            <Typography>HOME</Typography>
           </Link>
-          <Typography className={classes.userName}>ABOUT</Typography>
-          <Typography className={classes.userName}>CONTACT</Typography>
+          <Link to="/about" className={classes.link}>
+            <Typography>ABOUT</Typography>
+          </Link>
+          <Link to="/contact" className={classes.link}>
+            <Typography>CONTACT</Typography>
+          </Link>
           <Toolbar className={classes.toolbar}>
             <div className={classes.profile}>
               <Avatar
-                className={classes.avatar}
+                style={{
+                  backgroundColor: randomColor(),
+                }}
                 alt={user?.result.name}
                 src={user?.result.imageUrl}
               >
@@ -120,8 +148,12 @@ const Header = () => {
           <Link to="/" className={classes.link}>
             <Typography>HOME</Typography>
           </Link>
-          <Typography>ABOUT</Typography>
-          <Typography>CONTACT</Typography>
+          <Link to="/about" className={classes.link}>
+            <Typography>ABOUT</Typography>
+          </Link>
+          <Link to="/contact" className={classes.link}>
+            <Typography>CONTACT</Typography>
+          </Link>
           <Toolbar className={classes.toolbar}>
             <div className={classes.profile}>
               <Button component={Link} to="/auth" color="primary">

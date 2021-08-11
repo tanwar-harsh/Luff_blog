@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Grid, Box } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { Link, useLocation } from "react-router-dom";
 
 import { getAllPosts } from "../../service/api";
@@ -23,6 +23,8 @@ const Posts = () => {
 
   const postCount = posts.length;
   console.log(postCount);
+
+  
 
   if (postCount > 0) {
     return posts.reverse().map((post) => (

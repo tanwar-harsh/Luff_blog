@@ -9,9 +9,12 @@ import {
   Typography,
   NativeSelect,
 } from "@material-ui/core";
-import { AddCircle } from "@material-ui/icons";
+import { AddCircle, Image } from "@material-ui/icons";
 import { getPost, updatePost, uploadFile } from "../../service/api";
 import { useHistory, useLocation } from "react-router-dom";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import parse from "html-react-parser";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -26,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "cover",
   },
   form: {
-    width: "100%",
+    width: "80vw",
     display: "flex",
     flexDirection: "column",
     marginTop: 10,
@@ -34,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   form1: {
     display: "flex",
     flexDirection: "row",
-    width: "100%",
+    flex: 1,
   },
   form2: {
     display: "flex",
@@ -57,6 +60,17 @@ const useStyles = makeStyles((theme) => ({
     "&:focus": {
       outline: "none",
     },
+  },
+  button: {
+    margin: "0 10px",
+    backgroundColor: "white",
+    color: "black",
+  },
+  editor: {
+    paddingTop: "30px",
+  },
+  preview: {
+    paddingTop: "20px",
   },
 }));
 
@@ -87,6 +101,17 @@ const UpdateView = ({ match }) => {
     };
     fetchData();
   }, [match.params.id]);
+
+  const [desc, setDesc] = useState("");
+  useEffect(() => {
+    const setDescvalue = () => {
+      if (desc === "") {
+        setDesc(post.description);
+      }
+    };
+    setDescvalue();
+  }, [desc]);
+  console.log("desc", desc);
 
   useEffect(
     (post) => {
@@ -123,6 +148,8 @@ const UpdateView = ({ match }) => {
     history.push(`/details/${match.params.id}`);
   };
 
+  console.log(post.description);
+
   return (
     <Box className={classes.container}>
       <img src={url} className={classes.image} />
@@ -148,6 +175,16 @@ const UpdateView = ({ match }) => {
             value={post.title}
             className={classes.textField}
           />
+          <Button
+            href="https://popa-topa.web.app/"
+            target="_blank"
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            startIcon={<Image />}
+          >
+            Find Images online
+          </Button>
           <Button
             onClick={() => updateBlog()}
             variant="contained"
@@ -176,14 +213,39 @@ const UpdateView = ({ match }) => {
         </Box>
       </FormControl>
 
-      <TextareaAutosize
+      {/* <TextareaAutosize
         onChange={(e) => handleChange(e)}
         name="description"
         minRows={5}
         placeholder="Tell your Story"
         value={post.description}
         className={classes.textarea}
-      />
+      /> */}
+      <Box className={classes.editor}>
+        <CKEditor
+          editor={ClassicEditor}
+          className={classes.textarea}
+          config={{
+            placeholder: " click to get previous description",
+          }}
+          data={desc}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            setDesc(data);
+            post.description = data;
+            console.log(post.description);
+          }}
+          onBlur={(event, editor) => {
+            editor.setData(post.description);
+          }}
+          onFocus={(event, editor) => {
+            editor.setData(post.description);
+          }}
+        />
+      </Box>
+      <Box className={classes.preview}>
+        <Typography>Preview - {parse(desc)}</Typography>
+      </Box>
     </Box>
   );
 };
