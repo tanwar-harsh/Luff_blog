@@ -41,7 +41,6 @@ const Post = ({ post }) => {
   const url = post.picture || "https://i.imgur.com/uaPwCQE.jpg";
 
   const data = `${post.description}`;
-  console.log(data);
 
   return (
     <Box className={classes.container}>

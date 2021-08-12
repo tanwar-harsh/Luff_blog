@@ -3,6 +3,9 @@ import { makeStyles, Box, Typography } from "@material-ui/core";
 const url1 = "https://i.imgur.com/K3BnxjM.png";
 
 const useStyles = makeStyles((theme) => ({
+  container: {
+    height: "100vh",
+  },
   image: {
     background: `url(${url1}) center/55% repeat-x #000`,
     width: "100vw",
@@ -40,7 +43,7 @@ const About = () => {
   const classes = useStyles();
 
   return (
-    <Box>
+    <Box className={classes.container}>
       <Box className={classes.image}>
         <Typography>About</Typography>
       </Box>

@@ -10,6 +10,7 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  Card,
 } from "@material-ui/core";
 import { Link, useHistory } from "react-router-dom";
 import { LockOutlined, Visibility, VisibilityOff } from "@material-ui/icons";
@@ -26,11 +27,11 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     justifyContent: "center",
-    marginTop: 200,
+    paddingTop: 200,
   },
   paper: {
     display: "flex",
-    background: "#c8c2cc",
+    background: "#696969",
     flexDirection: "column",
     alignItems: "center",
     paddingTop: 40,
@@ -131,103 +132,104 @@ const Auth = () => {
   };
 
   return (
-    <Box className={classes.container}>
-      <Paper className={classes.paper} elevation={3}>
-        <Avatar style={{ padding: 10, background: "white" }}>
-          <LockOutlined fontSize="large" color="primary" />
-        </Avatar>
-        <Typography className={classes.heading}>
-          {isSignUp ? "Sign Up" : "Login"}
-        </Typography>
-        <form className={classes.form} onSubmit={(e) => handleSubmit(e)}>
-          {isSignUp && (
-            <>
-              <TextField
-                onChange={(e) => handleChange(e)}
-                required
-                name="firstName"
-                placeholder=" First Name"
-                className={classes.textField}
-                variant="filled"
-              />
-              <TextField
-                onChange={(e) => handleChange(e)}
-                required
-                name="lastName"
-                placeholder=" Last Name"
-                className={classes.textField}
-                variant="filled"
-              />
-            </>
-          )}
-          <TextField
-            onChange={(e) => handleChange(e)}
-            required
-            name="email"
-            placeholder=" Email"
-            className={classes.textField}
-            variant="filled"
-          />
-          <TextField
-            onChange={(e) => handleChange(e)}
-            required
-            name="password"
-            placeholder=" Password"
-            className={classes.textField}
-            variant="filled"
-            type={showPassword ? "text" : "password"}
-            handleShowPassword={handleShowPassword}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={handleShowPassword}>
-                    {showPassword === false ? (
-                      <Visibility />
-                    ) : (
-                      <VisibilityOff />
-                    )}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          {isSignUp && (
-            <>
-              <TextField
-                onChange={(e) => handleChange(e)}
-                required
-                name="password2"
-                placeholder="Confirm password"
-                className={classes.textField}
-                variant="filled"
-                type={showPassword1 ? "text" : "password"}
-                handleShowPassword={handleShowPassword1}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleShowPassword1}>
-                        {showPassword1 === false ? (
-                          <Visibility />
-                        ) : (
-                          <VisibilityOff />
-                        )}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </>
-          )}
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
+    <Paper style={{ height: "100vh", width: "100vw" }}>
+      <Box className={classes.container}>
+        <Card className={classes.paper} elevation={3}>
+          <Avatar style={{ padding: 10, background: "white" }}>
+            <LockOutlined fontSize="large" color="primary" />
+          </Avatar>
+          <Typography className={classes.heading}>
             {isSignUp ? "Sign Up" : "Login"}
-          </Button>
+          </Typography>
+          <form className={classes.form} onSubmit={(e) => handleSubmit(e)}>
+            {isSignUp && (
+              <>
+                <TextField
+                  onChange={(e) => handleChange(e)}
+                  required
+                  name="firstName"
+                  placeholder=" First Name"
+                  className={classes.textField}
+                  variant="filled"
+                />
+                <TextField
+                  onChange={(e) => handleChange(e)}
+                  required
+                  name="lastName"
+                  placeholder=" Last Name"
+                  className={classes.textField}
+                  variant="filled"
+                />
+              </>
+            )}
+            <TextField
+              onChange={(e) => handleChange(e)}
+              required
+              name="email"
+              placeholder=" Email"
+              className={classes.textField}
+              variant="filled"
+            />
+            <TextField
+              onChange={(e) => handleChange(e)}
+              required
+              name="password"
+              placeholder=" Password"
+              className={classes.textField}
+              variant="filled"
+              type={showPassword ? "text" : "password"}
+              handleShowPassword={handleShowPassword}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton onClick={handleShowPassword}>
+                      {showPassword === false ? (
+                        <Visibility />
+                      ) : (
+                        <VisibilityOff />
+                      )}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {isSignUp && (
+              <>
+                <TextField
+                  onChange={(e) => handleChange(e)}
+                  required
+                  name="password2"
+                  placeholder="Confirm password"
+                  className={classes.textField}
+                  variant="filled"
+                  type={showPassword1 ? "text" : "password"}
+                  handleShowPassword={handleShowPassword1}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton onClick={handleShowPassword1}>
+                          {showPassword1 === false ? (
+                            <Visibility />
+                          ) : (
+                            <VisibilityOff />
+                          )}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </>
+            )}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
+              {isSignUp ? "Sign Up" : "Login"}
+            </Button>
 
-          {/* <GoogleLogin
+            {/* <GoogleLogin
             clientId="9556540863-q82l1ee8u1d7g9g9ll0ohu2jqlfbnfpl.apps.googleusercontent.com"
             render={(renderProps) => (
               <Button
@@ -246,20 +248,21 @@ const Auth = () => {
             cookiePolicy="single_host_origin"
           /> */}
 
-          <Box className={classes.button2}>
-            <Button
-              onClick={() => switchMode()}
-              color="primary"
-              style={{ fontSize: 12 }}
-            >
-              {isSignUp
-                ? "Already have an account? Login"
-                : "Create an Account"}
-            </Button>
-          </Box>
-        </form>
-      </Paper>
-    </Box>
+            <Box className={classes.button2}>
+              <Button
+                onClick={() => switchMode()}
+                color="primary"
+                style={{ fontSize: 12 }}
+              >
+                {isSignUp
+                  ? "Already have an account? Login"
+                  : "Create an Account"}
+              </Button>
+            </Box>
+          </form>
+        </Card>
+      </Box>
+    </Paper>
   );
 };
 
