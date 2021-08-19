@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 const Connection = async () => {
   try {
-    const URL =
-      "mongodb://user:luffyguy123@luffyguy-shard-00-00.urqs4.mongodb.net:27017,luffyguy-shard-00-01.urqs4.mongodb.net:27017,luffyguy-shard-00-02.urqs4.mongodb.net:27017/BLOG?ssl=true&replicaSet=atlas-32wlkp-shard-0&authSource=admin&retryWrites=true&w=majority";
+    const URL = process.env.DB_URL;
     await mongoose.connect(URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -14,5 +15,4 @@ const Connection = async () => {
     console.log("Error while connection to mongoDb ", error);
   }
 };
-
 export default Connection;
